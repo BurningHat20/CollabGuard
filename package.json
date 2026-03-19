@@ -1,0 +1,104 @@
+{
+  "name": "collab-guard",
+  "displayName": "CollabGuard – Team File Presence",
+  "description": "See who is editing which file on a shared VPS. Prevents accidental overwrites.",
+  "version": "0.2.0",
+  "publisher": "team-local",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/local/collab-guard" },
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+
+  "extensionKind": ["ui", "workspace"],
+
+  "activationEvents": ["onStartupFinished"],
+
+  "main": "./out/extension.js",
+
+  "contributes": {
+    "commands": [
+      {
+        "command": "collabGuard.refresh",
+        "title": "CollabGuard: Refresh Presence",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "collabGuard.setUsername",
+        "title": "CollabGuard: Set My Username"
+      },
+      {
+        "command": "collabGuard.showTeam",
+        "title": "CollabGuard: Show Online Team"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "collabGuardContainer",
+          "title": "CollabGuard",
+          "icon": "resources/activity-icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "collabGuardContainer": [
+        {
+          "id": "collabGuardTree",
+          "name": "Team Presence",
+          "when": "collabGuard.isWorkspace"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "collabGuard.refresh",
+          "when": "view == collabGuardTree",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CollabGuard",
+      "properties": {
+        "collabGuard.username": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "**Set this in your LOCAL settings** (not remote). Your display name shown to teammates. Defaults to your machine hostname if empty.",
+          "scope": "application"
+        },
+        "collabGuard.presenceFile": {
+          "type": "string",
+          "default": ".vscode/collab-presence.json",
+          "description": "Workspace-relative path to the shared presence file on the VPS.",
+          "scope": "resource"
+        },
+        "collabGuard.pollIntervalMs": {
+          "type": "number",
+          "default": 4000,
+          "description": "How often (ms) to refresh presence from disk.",
+          "scope": "resource"
+        },
+        "collabGuard.staleAfterMs": {
+          "type": "number",
+          "default": 15000,
+          "description": "A user is marked offline after this many ms of inactivity.",
+          "scope": "resource"
+        }
+      }
+    }
+  },
+
+  "scripts": {
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "npm run compile && vsce package --no-dependencies --allow-missing-repository",
+    "vscode:prepublish": "npm run compile"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  }
+}

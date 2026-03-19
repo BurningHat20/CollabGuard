@@ -1,0 +1,6 @@
+.vscode/**
+src/**
+**/*.ts
+!out/**
+node_modules/**
+*.vsix

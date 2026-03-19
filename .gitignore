@@ -1,0 +1,4 @@
+out/
+node_modules/
+*.vsix
+.vscode/collab-presence.json
